@@ -4,7 +4,9 @@ import authRoutes from "../src/routes/auth.route.js";
 import { connectDB } from "./lib/db.js";
 
 const app = express();
-const port = process.env.PORT 
+const port = process.env.PORT;
+
+app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 
