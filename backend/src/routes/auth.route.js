@@ -11,4 +11,9 @@ router.post("/logout", logout);
 
 router.post("/onboarding", protectedRoute, onBoard);
 
+//check if user is logged in
+router.get("/me", protectedRoute, (req, res) => {
+    res.status(200).json({ success: true, user: req.user });
+});
+
 export default router;
