@@ -54,7 +54,6 @@ const userSchema = new mongoose.Schema({
     timestamps: true //createdAt and updatedAt
 })
 
-const User = mongoose.model("User", userSchema);
 
 //pre hook to hash password. hash password before saving to database. hash means encrypting the password
 userSchema.pre("save", async function (next) {
@@ -70,5 +69,14 @@ userSchema.pre("save", async function (next) {
         next(error);
     }
 })
+
+userSchema.methods.matchPassword = async function (enteredPassword) {
+    const isPasswordCorrect = await bcryptjs.compare(enteredPassword, this.password);
+    return isPasswordCorrect;
+}
+
+const User = mongoose.model("User", userSchema);
+
+
 
 export default User;
