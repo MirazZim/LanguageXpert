@@ -1,7 +1,7 @@
 
 const App = () => {
   return (
-    <div className="bg-red-500 h-screen">
+    <div className="h-screen" data-theme="coffee">
       <button className="btn btn-neutral">Neutral</button>
 <button className="btn btn-primary">Primary</button>
 <button className="btn btn-secondary">Secondary</button>
