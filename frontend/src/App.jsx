@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from "react-router"
+import {  Navigate, Route, Routes } from "react-router"
 import HomePage from "./Pages/HomePage.jsx"
 import LoginPage from "./Pages/LoginPage.jsx"
 import SignupPage from "./Pages/SignupPage.jsx"
@@ -8,6 +8,7 @@ import CallPage from "./Pages/CallPage.jsx"
 import ChatPage from "./Pages/ChatPage.jsx"
 import { Toaster } from "react-hot-toast"
 import { useQuery } from "@tanstack/react-query"
+import { axiosInstance } from "./lib/axios.js"
 
 const App = () => {
 
