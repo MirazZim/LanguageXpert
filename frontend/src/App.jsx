@@ -7,25 +7,15 @@ import NotificationsPage from "./Pages/NotificationsPage.jsx"
 import CallPage from "./Pages/CallPage.jsx"
 import ChatPage from "./Pages/ChatPage.jsx"
 import { Toaster } from "react-hot-toast"
-import { useQuery } from "@tanstack/react-query"
-import { axiosInstance } from "./lib/axios.js"
 import PageLoader from "./components/PageLoader.jsx"
+import useAuthUser from "./hooks/useAuthUser.js"
 
 const App = () => {
 
-  const {data: authData , isloading} = useQuery({
-    queryKey:["authUser"],
-    queryFn: async () =>{
-      const res = await axiosInstance.get("/auth/me");
-      return res.data;
-    },
-    retry: false, // auth user should not be retried
-    
-  })
+  
+   const {authUser , isLoading} = useAuthUser();
 
-  const authUser = authData?.user;
-
-  if(isloading)
+  if(isLoading)
     return <PageLoader />;
   
 
