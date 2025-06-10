@@ -1,4 +1,4 @@
-import {  Navigate, Route, Routes } from "react-router"
+import { Navigate, Route, Routes } from "react-router"
 import HomePage from "./Pages/HomePage.jsx"
 import LoginPage from "./Pages/LoginPage.jsx"
 import SignupPage from "./Pages/SignupPage.jsx"
@@ -12,33 +12,46 @@ import useAuthUser from "./hooks/useAuthUser.js"
 
 const App = () => {
 
-  
-   const {authUser , isLoading} = useAuthUser();
 
-  if(isLoading)
+  const { authUser, isLoading } = useAuthUser();
+
+  const isAuthenticated = Boolean(authUser);
+  const isOnboarded = authUser?.isOnboarded;
+
+  if (isLoading)
     return <PageLoader />;
-  
+
 
 
   return (
     <div className="h-screen">
 
       <Routes>
-        <Route path="/" element={authUser ? <HomePage /> : <Navigate to="/login" />} />
+        <Route
+          path="/"
+          element={
+            isAuthenticated && isOnboarded ? (
+              <HomePage />
+            ) : (
+              <Navigate to={!isAuthenticated ? "/login" : "/onboarding"} />
+            )
+          } />
 
+        <Route path="/login" element={
+            !isAuthenticated ? <LoginPage /> : <Navigate to={isOnboarded ? "/" : "/onboarding"} />
+          } />
 
-        <Route path="/login" element={!authUser ? <LoginPage /> : 
-        <Navigate to="/" />} />
-        
-        <Route path="/signup" element={!authUser ? <SignupPage /> : <Navigate to="/" />} />
-        
-        <Route path="/onboarding" element={<OnboardingPage />} />
-        
-        <Route path="/notifications" element={authUser ?<NotificationsPage /> : <Navigate to="/" />} />
-        
-        <Route path="/call" element={authUser ?<CallPage /> : <Navigate to="/" />} />
-        
-        <Route path="/chat" element={authUser ?<ChatPage /> : <Navigate to="/" />} />
+        <Route path="/signup" element={
+            !isAuthenticated ? <SignupPage /> : <Navigate to={isOnboarded ? "/" : "/onboarding"} />
+          } />
+
+        <Route path="/onboarding" element={!isAuthenticated ? <OnboardingPage /> : <Navigate to="/" />} />
+
+        <Route path="/notifications" element={isAuthenticated ? <NotificationsPage /> : <Navigate to="/" />} />
+
+        <Route path="/call" element={isAuthenticated ? <CallPage /> : <Navigate to="/" />} />
+
+        <Route path="/chat" element={isAuthenticated ? <ChatPage /> : <Navigate to="/" />} />
       </Routes>
 
       <Toaster />
