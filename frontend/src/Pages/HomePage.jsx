@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getOutgoingFriendReqs, getRecommendedUsers, getUserFriends, sendFriendRequest } from "../lib/api";
 
 const HomePage = () => {
@@ -28,6 +28,16 @@ const HomePage = () => {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["outgoingFriendReqs"] }),
   });
 
+//this will store the ids of the users to which the user has sent a friend request
+  useEffect(() => {
+    const outgoingIds = new Set();
+    if (outgoingFriendReqs && outgoingFriendReqs.length > 0) {
+      outgoingFriendReqs.forEach((req) => {
+        outgoingIds.add(req.recipient._id);
+      });
+      setOutgoingRequestsIds(outgoingIds);
+    }
+  }, [outgoingFriendReqs]);
 
 
   return (
