@@ -25,6 +25,8 @@ const FriendCard = ({ friend }) => {
           </span>
         </div>
 
+        {/* MESSAGE BUTTON */}
+
         <Link to={`/chat/${friend._id}`} className="btn btn-outline w-full">
           Message
         </Link>
