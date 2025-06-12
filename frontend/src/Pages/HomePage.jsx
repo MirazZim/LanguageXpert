@@ -140,10 +140,11 @@ const HomePage = () => {
                           Learning: {capitialize(user.learningLanguage)}
                         </span>
                       </div>
-
+                   
+                     {/* bio */}
                       {user.bio && <p className="text-sm opacity-70">{user.bio}</p>}
 
-                      {/* Action button */}
+                     {/* Action button */}
                       <button
                         className={`btn w-full mt-2 ${
                           hasRequestBeenSent ? "btn-disabled" : "btn-primary"
