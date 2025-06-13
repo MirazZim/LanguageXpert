@@ -11,6 +11,7 @@ import PageLoader from "./components/PageLoader.jsx"
 import useAuthUser from "./hooks/useAuthUser.js"
 import Layout from "./components/Layout.jsx"
 import { useThemeStore } from "./store/useThemeStore.js"
+import Navbar from "./components/Navbar.jsx"
 
 const App = () => {
 
@@ -64,13 +65,23 @@ const App = () => {
         element={
           isAuthenticated && isOnboarded ? 
           /* if user is authenticated and onboarded */
-          (<Layout showSidebar={true}><NotificationsPage /></Layout>) : 
+          (<Layout showSidebar={true}>
+            <NotificationsPage />
+            </Layout>) : 
           /* if user is not authenticated or not onboarded */
           (<Navigate to={!isAuthenticated ? "/login" : "/onboarding"} />)} />
 
         <Route path="/call" element={isAuthenticated ? <CallPage /> : <Navigate to="/" />} />
 
-        <Route path="/chat" element={isAuthenticated ? <ChatPage /> : <Navigate to="/" />} />
+        <Route path="/chat/:id" element={
+          isAuthenticated && isOnboarded ? 
+          /* if user is authenticated and onboarded */
+          (<Layout showSidebar={true}>
+
+            <ChatPage />
+            </Layout>) : 
+          /* if user is not authenticated or not onboarded */
+          (<Navigate to={!isAuthenticated ? "/login" : "/onboarding"} />)} />
       </Routes>
 
       <Toaster />
