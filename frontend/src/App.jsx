@@ -60,28 +60,37 @@ const App = () => {
                 : (<Navigate to="/" />))
               : (<Navigate to="/login" />)} />
 
-        <Route 
-        path="/notifications" 
-        element={
-          isAuthenticated && isOnboarded ? 
-          /* if user is authenticated and onboarded */
-          (<Layout showSidebar={true}>
-            <NotificationsPage />
-            </Layout>) : 
-          /* if user is not authenticated or not onboarded */
-          (<Navigate to={!isAuthenticated ? "/login" : "/onboarding"} />)} />
+        <Route
+          path="/notifications"
+          element={
+            isAuthenticated && isOnboarded ?
+              /* if user is authenticated and onboarded */
+              (<Layout showSidebar={true}>
+                <NotificationsPage />
+              </Layout>) :
+              /* if user is not authenticated or not onboarded */
+              (<Navigate to={!isAuthenticated ? "/login" : "/onboarding"} />)} />
 
-        <Route path="/call" element={isAuthenticated ? <CallPage /> : <Navigate to="/" />} />
+        <Route
+          path="/call/:id"
+          element={
+            isAuthenticated && isOnboarded ? (
+              <CallPage />
+            ) : (
+              <Navigate to={!isAuthenticated ? "/login" : "/onboarding"} />
+            )
+          }
+        />
 
         <Route path="/chat/:id" element={
-          isAuthenticated && isOnboarded ? 
-          /* if user is authenticated and onboarded */
-          (<Layout showSidebar={true}>
+          isAuthenticated && isOnboarded ?
+            /* if user is authenticated and onboarded */
+            (<Layout showSidebar={true}>
 
-            <ChatPage />
-            </Layout>) : 
-          /* if user is not authenticated or not onboarded */
-          (<Navigate to={!isAuthenticated ? "/login" : "/onboarding"} />)} />
+              <ChatPage />
+            </Layout>) :
+            /* if user is not authenticated or not onboarded */
+            (<Navigate to={!isAuthenticated ? "/login" : "/onboarding"} />)} />
       </Routes>
 
       <Toaster />
