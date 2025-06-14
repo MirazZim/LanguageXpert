@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { Languages } from "lucide-react";
+import { EyeIcon, EyeOffIcon, Languages } from "lucide-react";
 import signupImg from "../../public/i.png";
 import { signup } from "../lib/api.js";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const SignupPage = () => {
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const [signupData, setSignupData] = useState({
     fullName: "",
     email: "",
@@ -27,6 +28,7 @@ const SignupPage = () => {
     e.preventDefault();
     signupMutation(signupData);
   };
+
 
   return (
     <div className="h-screen flex items-center justify-center p-4 sm:p-6 md:p-8" data-theme="forest">
@@ -95,19 +97,31 @@ const SignupPage = () => {
                     <label className="label">
                       <span className="label-text">Password</span>
                     </label>
-                    <input
-                      type="password"
-                      placeholder="********"
-                      className="input input-bordered w-full"
-                      value={signupData.password}
-                      onChange={(e) => setSignupData({ ...signupData, password: e.target.value })}
-                      required
-                    />
+                    <div className="relative">
+                      <input
+                        type={passwordVisible ? "text" : "password"} // Toggle input type based on passwordVisible
+                        placeholder="********"
+                        className="input input-bordered w-full"
+                        value={signupData.password}
+                        onChange={(e) => setSignupData({ ...signupData, password: e.target.value })}
+                        required
+                      />
+                      <button
+                        type="button"
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2"
+                        onClick={() => setPasswordVisible(!passwordVisible)} // Toggle password visibility
+                      >
+                        {passwordVisible ? (
+                          <EyeOffIcon className="h-5 w-5 text-base-content opacity-70" />
+                        ) : (
+                          <EyeIcon className="h-5 w-5 text-base-content opacity-70" />
+                        )}
+                      </button>
+                    </div>
                     <p className="text-xs opacity-70 mt-1">
                       Password must be at least 6 characters long
                     </p>
                   </div>
-
                   {/* TERMS AND CONDITIONS */}
                   <div className="form-control">
                     <label className="label cursor-pointer justify-start gap-2">

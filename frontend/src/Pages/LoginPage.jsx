@@ -1,9 +1,10 @@
 import { useState } from "react";
 import useLogin from "../hooks/useLogin.js";
-import { Languages } from "lucide-react";
+import { EyeIcon, EyeOffIcon, Languages } from "lucide-react";
 import { Link } from "react-router";
 
 const LoginPage = () => {
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const [loginData, setLoginData] = useState({
     email: "",
     password: "",
@@ -66,14 +67,28 @@ const LoginPage = () => {
                     <label className="label">
                       <span className="label-text">Password</span>
                     </label>
-                    <input
-                      type="password"
-                      placeholder="••••••••"
-                      className="input input-bordered w-full"
-                      value={loginData.password}
-                      onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
-                      required
-                    />
+                    <div className="relative">
+                      <input
+                        type={passwordVisible ? "text" : "password"} // Toggle password visibility based on passwordVisible state
+                        placeholder="••••••••"
+                        className="input input-bordered w-full"
+                        value={loginData.password}
+                        onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+                        required
+                      />
+                      {/* Eye icon button to toggle password visibility */}
+                      <button
+                        type="button"
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2"
+                        onClick={() => setPasswordVisible(!passwordVisible)} // Toggle the visibility of the password
+                      >
+                        {passwordVisible ? (
+                          <EyeOffIcon className="h-5 w-5 text-base-content opacity-70" />
+                        ) : (
+                          <EyeIcon className="h-5 w-5 text-base-content opacity-70" />
+                        )}
+                      </button>
+                    </div>
                   </div>
 
                   <button type="submit" className="btn btn-primary w-full" disabled={isPending}>
