@@ -7,6 +7,7 @@ import { connectDB } from "./lib/db.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import path from "path";
+import job from "./cron/cron.js";
 
 const app = express();
 const port = process.env.PORT;
@@ -36,4 +37,5 @@ if (process.env.NODE_ENV === "production") {
 app.listen(port, () => {
     console.log(`Server started on port ${port}`);
     connectDB();
+    job.start();
 });
