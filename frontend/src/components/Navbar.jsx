@@ -1,21 +1,49 @@
 import { Link, useLocation } from "react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import useAuthUser from "../hooks/useAuthUser";
 import useLogout from "../hooks/useLogout.js";
 import { BellIcon, Languages, LogOutIcon, MenuIcon, XIcon, HomeIcon, UsersIcon } from "lucide-react";
 import ThemeSelector from "./ThemeSelector.jsx";
+import { getFriendRequests } from "../lib/api";
 
 const Navbar = () => {
     const { authUser } = useAuthUser();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [hasSeenNotifications, setHasSeenNotifications] = useState(false);
 
     const location = useLocation();
-
     const currentPath = location.pathname;
-
     const isChatPage = location.pathname?.startsWith("/chat");
+    const isNotificationsPage = location.pathname === "/notifications";
 
     const { logoutMutation } = useLogout();
+
+    // Fetch friend requests to get notification count
+    const { data: friendRequests } = useQuery({
+        queryKey: ["friendRequests"],
+        queryFn: getFriendRequests,
+        enabled: !!authUser, // Only fetch when user is authenticated
+        refetchInterval: 30000, // Refetch every 30 seconds for real-time updates
+    });
+
+    const incomingRequestsCount = friendRequests?.incomingReqs?.length || 0;
+
+    // Reset notification badge when visiting notifications page
+    useEffect(() => {
+        if (isNotificationsPage) {
+            setHasSeenNotifications(true);
+        }
+    }, [isNotificationsPage]);
+
+    // Reset hasSeenNotifications when new requests come in
+    useEffect(() => {
+        if (incomingRequestsCount > 0 && !isNotificationsPage) {
+            setHasSeenNotifications(false);
+        }
+    }, [incomingRequestsCount, isNotificationsPage]);
+
+    const showNotificationBadge = incomingRequestsCount > 0 && !hasSeenNotifications;
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
@@ -49,14 +77,22 @@ const Navbar = () => {
                         )}
 
                         <div className="flex items-center gap-3 sm:gap-4 ml-auto">
-                            <Link to={"/notifications"}>
-                                <button className="btn btn-ghost btn-circle">
+                            {/* Enhanced Notification Bell with Badge */}
+                            <Link to={"/notifications"} className="relative">
+                                <button className="btn btn-ghost btn-circle relative">
                                     <BellIcon className="h-6 w-6 text-base-content opacity-70" />
+                                    {/* Notification Badge */}
+                                    {showNotificationBadge && (
+                                        <div className="absolute -top-1 -right-1 flex items-center justify-center">
+                                            <span className="bg-error text-error-content text-xs font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1 animate-pulse">
+                                                {incomingRequestsCount > 99 ? '99+' : incomingRequestsCount}
+                                            </span>
+                                        </div>
+                                    )}
                                 </button>
                             </Link>
                         </div>
 
-                        {/* TODO */}
                         <ThemeSelector />
 
                         <div className="avatar">
@@ -124,6 +160,7 @@ const Navbar = () => {
                         <UsersIcon className="size-5 text-base-content opacity-70" />
                         <span>Friends</span>
                     </Link>
+                    
                     <Link
                         to="/get-more-learners"
                         className={`btn btn-ghost justify-start w-full gap-3 px-3 normal-case ${
@@ -135,15 +172,30 @@ const Navbar = () => {
                         <span>Meet new Learners</span>
                     </Link>
 
+                    {/* Enhanced Notifications Link with Badge in Sidebar */}
                     <Link
                         to="/notifications"
-                        className={`btn btn-ghost justify-start w-full gap-3 px-3 normal-case ${
+                        className={`btn btn-ghost justify-start w-full gap-3 px-3 normal-case relative ${
                             currentPath === "/notifications" ? "btn-active" : ""
                         }`}
                         onClick={closeSidebar}
                     >
-                        <BellIcon className="size-5 text-base-content opacity-70" />
+                        <div className="relative">
+                            <BellIcon className="size-5 text-base-content opacity-70" />
+                            {/* Mobile Sidebar Notification Badge */}
+                            {showNotificationBadge && (
+                                <span className="absolute -top-2 -right-2 bg-error text-error-content text-xs font-bold rounded-full min-w-[16px] h-4 flex items-center justify-center px-1 animate-pulse">
+                                    {incomingRequestsCount > 9 ? '9+' : incomingRequestsCount}
+                                </span>
+                            )}
+                        </div>
                         <span>Notifications</span>
+                        {/* Alternative badge position for mobile */}
+                        {showNotificationBadge && (
+                            <span className="badge badge-error badge-sm ml-auto">
+                                {incomingRequestsCount}
+                            </span>
+                        )}
                     </Link>
                 </nav>
 
