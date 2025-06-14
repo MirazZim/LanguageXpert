@@ -128,6 +128,16 @@ const Navbar = () => {
                         <UsersIcon className="size-5 text-base-content opacity-70" />
                         <span>Friends</span>
                     </Link>
+                    <Link
+                        to="/get-more-learners"
+                        className={`btn btn-ghost justify-start w-full gap-3 px-3 normal-case ${
+                            currentPath === "/get-more-learners" ? "btn-active" : ""
+                        }`}
+                        onClick={closeSidebar}
+                    >
+                        <UsersIcon className="size-5 text-base-content opacity-70" />
+                        <span>Meet new Learners</span>
+                    </Link>
 
                     <Link
                         to="/notifications"

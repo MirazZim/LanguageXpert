@@ -3,6 +3,7 @@ import { getUserFriends } from "../lib/api";
 import NoFriendsFound from "../components/NoFriendsFound";
 import FriendCard from "../components/FriendCard";
 import { UsersIcon, SparklesIcon } from "lucide-react";
+import { Link } from "react-router";
 
 const FriendPage = () => {
     const { data: friends = [], isLoading: loadingFriends } = useQuery({
@@ -110,9 +111,9 @@ const FriendPage = () => {
                                     <p className="text-base-content/70 mb-4">
                                         The more friends you have, the richer your language learning experience becomes.
                                     </p>
-                                    <button className="btn btn-primary btn-sm">
+                                    <Link to="/get-more-learners" className="btn btn-primary btn-sm">
                                         Find More Friends
-                                    </button>
+                                    </Link>
                                 </div>
                             </div>
                         )}

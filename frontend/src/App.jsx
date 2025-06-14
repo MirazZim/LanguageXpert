@@ -13,6 +13,7 @@ import Layout from "./components/Layout.jsx"
 import { useThemeStore } from "./store/useThemeStore.js"
 import Navbar from "./components/Navbar.jsx"
 import FriendPage from "./Pages/FriendPage.jsx"
+import LearnersPage from "./Pages/LearnersPage.jsx"
 
 const App = () => {
 
@@ -83,12 +84,27 @@ const App = () => {
           }
         />
 
+
+
         <Route
           path="/friends"
           element={
             isAuthenticated && isOnboarded ? (
               <Layout showSidebar={true}>
                 <FriendPage />
+              </Layout>
+            ) : (
+              <Navigate to={!isAuthenticated ? "/login" : "/onboarding"} />
+            )
+          }
+        />
+
+        <Route
+          path="/get-more-learners"
+          element={
+            isAuthenticated && isOnboarded ? (
+              <Layout showSidebar={true}>
+                <LearnersPage />
               </Layout>
             ) : (
               <Navigate to={!isAuthenticated ? "/login" : "/onboarding"} />
