@@ -35,7 +35,6 @@ const ChatPage = () => {
     enabled: !!authUser, // this will run only when authUser is available
   });
 
-
   useEffect(() => {
     const initChat = async () => {
       if (!tokenData?.token || !authUser) return;
@@ -92,27 +91,27 @@ const ChatPage = () => {
     }
   };
 
-
   if (loading || !chatClient || !channel) return <ChatLoader />;
 
-
   return (
-    <div className="h-[93vh]">
-      <Chat client={chatClient}>
-        <Channel channel={channel}>
-          <div className="w-full relative">
-            <CallButton handleVideoCall={handleVideoCall}/>
-            <Window>
-              <ChannelHeader />
-              <MessageList />
-              <MessageInput focus />
-            </Window>
-          </div>
-          <Thread />
-        </Channel>
-      </Chat>
-    </div>
-  )
-}
+    <>
+      <div className="h-[93vh] max-h-screen overflow-hidden">
+        <Chat client={chatClient}>
+          <Channel channel={channel}>
+            <div className="w-full h-full relative flex flex-col">
+              <CallButton handleVideoCall={handleVideoCall} />
+              <Window>
+                <ChannelHeader />
+                <MessageList />
+                <MessageInput focus />
+              </Window>
+            </div>
+            <Thread />
+          </Channel>
+        </Chat>
+      </div>
+    </>
+  );
+};
 
-export default ChatPage
+export default ChatPage;
